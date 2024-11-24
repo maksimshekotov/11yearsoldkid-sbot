@@ -1,0 +1,207 @@
+import telebot
+import random
+import os
+import requests
+
+# Токен
+bot = telebot.TeleBot("never")
+
+# Команда /start
+@bot.message_handler(commands=['start'])
+def send_start(message):
+    bot.reply_to(message, "Привет! Я твой Telegram бот. Напиши /help если хочешь ознакомится с командами")
+
+# Функция генерации пароля
+def genr(pass_length):
+    letters = "11234567890!@#$%^&*qwertyuiopasdfghjklzxcvbnm"
+    password = ''.join(random.choice(letters) for _ in range(pass_length))
+    return password
+
+
+
+# Команда /hello
+@bot.message_handler(commands=['hello'])
+def send_hello(message):
+    bot.reply_to(message, 'Привет! Как дела?')
+
+
+@bot.message_handler(commands=['fish'])
+def send_fish(message):
+    fich = os.listdir('fishes')
+    fefs = random.choice(fich)
+    with open(f"fishes/{fefs}", 'rb') as f:
+        bot.send_photo(message.chat.id, f)
+
+
+@bot.message_handler(commands=['sels'])
+def send_sels(message):
+    sals = os.listdir('seals')
+    sets = random.choice(sals)
+    with open(f"seals/{sets}", 'rb') as f:
+        bot.send_photo(message.chat.id, f)
+
+
+@bot.message_handler(commands=['cat'])
+def send_cat(message):
+    cets = os.listdir('cats')
+    kets = random.choice(cets)
+    with open(f"cats/{kets}", 'rb') as f:
+        bot.send_photo(message.chat.id, f)
+
+@bot.message_handler(commands=['img'])
+def send_img(message):
+    memek = os.listdir('images')
+    memer = random.choice(memek)
+    with open(f"images/{memer}", 'rb') as f:
+        bot.send_photo(message.chat.id, f)
+
+@bot.message_handler(commands=['meme'])
+def send_meme(message):
+    with open('memes/categ.jpg', 'rb') as f:  
+        bot.send_photo(message.chat.id, f)
+
+
+
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+    
+    
+@bot.message_handler(commands=['duck'])
+def duck(message):
+    '''По команде duck вызывает функцию get_duck_image_url и отправляет URL изображения утки'''
+    image_url = get_duck_image_url()
+    bot.reply_to(message, image_url)
+
+# Команда /help
+@bot.message_handler(commands=['help'])
+def send_help(message):
+    bot.reply_to(message, 'Команды: /start /hello /genpass <длина пароля> /joke <1-2-3> /help /group /meme /animals /eco /bye')
+
+
+#| начало /eco ==============================================================================================|
+@bot.message_handler(commands=['eco'])
+def send_eco(message):
+    bot.reply_to(message, """
+    привет, это офицальный гайд чо делать от 9 летнего бублина,
+    напиши с чем тебе нужна помошь.
+    вот команды:
+    /trash | как сортировать или использовать мусор
+    /natureplace | как помочь загрезьнонному месту
+    """)
+#| trash ==============================================================================|
+@bot.message_handler(commands=['trash'])
+def send_trash(message):
+    bot.reply_to(message, """
+    что вы хотите зделать?
+    /et1 | куда викидывать/отдавать не нужный мусор
+    /et2 | что зделать с ненужным мусором
+    """)
+
+@bot.message_handler(commands=['et1'])
+def send_et1(message):
+    bot.reply_to(message, """
+    куда выкидывать не нужный мусор?
+    стекло/бутылки сдавать их надо на пункт приема вам за это еще и заплатят
+    пластик/бумага/картон просто в пункт переработки
+    одежду отдай в секонд хенд
+    """)
+#| trash ==============================================================================|
+#| nature ===========================================================|
+@bot.message_handler(commands=['natureplace'])
+def send_natureplace(message):
+    bot.reply_to(message, """
+    вы хотите зашитить или почистить какоето место?
+    хорошо
+    /en1 | зашитить
+    /en2 | почистить
+    """)
+@bot.message_handler(commands=['en1'])
+def send_en1(message):
+    bot.reply_to(message, """
+    если хотите зашитить какоето место:
+    обратитесь в волонтёрскую организацию и создадите баннеры таблички со словами по типу:
+    загрезнение этого леса/реки/места грозит штрафом до 10тысячи
+    """)
+
+@bot.message_handler(commands=['en2'])
+def send_en2(message):
+    bot.reply_to(message, """
+    обратитесь к волонтёрской организации договоритесь с ней.
+    создадите баннеры запрещяюшиее загрязнение этого места и раставте их 
+    с волонтёрами поделитесь на группы и по сменам чистите это место.
+    """)
+#| nature ===========================================================|
+@bot.message_handler(commands=['et2'])
+def send_et2(message):
+    bot.reply_to(message, """
+    пластиковая бутылка = кораблик 
+    из картона вырежи танк машинку grumman f-17 tomcat fighter jet
+    из бумаги вырежи танк машинку grumman f-17 tomcat fighter jet и приклей на картон а потом разукрась
+    одежду разорви на трапки платки или отдай младшему(ей) брату/другу/сестре
+    """)
+
+# Команда /animal
+@bot.message_handler(commands=['animals'])
+def send_animals(message):
+    bot.reply_to(message, "напиши /cat /sels /fish /duck")
+
+
+
+# Команда /group
+@bot.message_handler(commands=['group'])
+def send_group(message):
+    bot.reply_to(message, 'https://t.me/+T1W-WRFesWA0ZmQ0')
+
+# Команда /genpass
+@bot.message_handler(commands=['genpass'])
+def send_genpass(message):
+    try:
+        
+        pass_length = int(message.text.split()[1])  
+        password = genr(pass_length)
+        bot.reply_to(message, f"Ваш пароль: {password}")
+    except (IndexError, ValueError):
+        bot.reply_to(message, "Пожалуйста, укажите длину пароля, например: /genpass 12")
+
+@bot.message_handler(commands=['joke1'])
+def send_joke1(message):
+    bot.reply_to(message, """
+    сидели на похоронах кокогота деда два мужика
+    первый говорит: а сколько этому деду хоть стукнуло?
+    а второй отвечает: 220 вольт 
+    """)
+
+@bot.message_handler(commands=['joke2'])
+def send_joke2(message):
+    bot.reply_to(message, """
+    Маленькая девочка спросила своего брата:
+    что такое любовь
+    а брат ей говорит:
+    — Это когда ты каждый день воруешь у меня из портфеля шоколад, а я продолжаю класть его в одно и то же место.
+    """)
+
+@bot.message_handler(commands=['joke3'])
+def send_joke3(message):
+    bot.reply_to(message, """
+    — Как ты умер?
+    — Это бестактный вопрос. У нас, хомячков, вообще особенные отношения со смертью. Мы идеальные жертвенные фигуры. Смерть настигает нас, примеряя на себя самые неожиданные обличья. Мы...
+    — Я жду конкретного ответа. 
+    — Я утонул в поилке.
+    """) 
+
+# Команда /bye
+@bot.message_handler(commands=['bye'])
+def send_bye(message):
+    bot.reply_to(message, "Пока! Удачи!")
+
+# Обработка других сообщений
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, message.text)
+
+# Запуск бота
+bot.polling(non_stop=True)
